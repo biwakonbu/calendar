@@ -1,0 +1,32 @@
+[project]
+name = "calendar"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Ryo Higasigawa", email = "ryo.higasigawa@gmail.com" }
+]
+dependencies = [
+    "django>=5.0.6",
+    "django-compressor>=4.4",
+    "django-allauth[socialaccount]>=0.63.3",
+    "ruff>=0.4.7",
+    "django-render-block>=0.9.2",
+    "django-htmx>=1.17.3",
+    "python-dateutil>=2.9.0.post0",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/calendar"]

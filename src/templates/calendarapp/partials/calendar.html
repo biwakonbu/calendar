@@ -1,0 +1,77 @@
+<div
+  class="flex flex-col w-8/12 mx-auto"
+  x-data="{modal: false, openDateId: ''}"
+>
+  <div class="w-fit mt-4 p-4">
+    <h2 class="flex text-xl font-bold text-gray-500">
+      <a
+        class="w-8 block text-center cursor-pointer"
+        href="{% url 'calendarapp:index' %}?date={{ prev|date:'Y-m-d' }}"
+        hx-trigger="click"
+        hx-boost="true"
+        ><</a
+      >
+      {{ today | date:"Y年 m月" }}
+      <a
+        class="w-8 block text-center cursor-pointer"
+        href="{% url 'calendarapp:index' %}?date={{ next|date:'Y-m-d' }}"
+        >></a
+      >
+    </h2>
+  </div>
+
+  <div class="flex mt-4 p-4 border-b-2">
+    {% for day in days %}
+    <div class="flex flex-1 text-gray-500 items-center justify-center">
+      <span>{{ day }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% for row in calendar %}
+  <div class="flex border-b-2">
+    {% for x in row %} {% if x != 0 %}
+    <div
+      class="flex flex-1 h-32 flex-col border-l last:border-r text-gray-500 first:text-red-500 last:text-red-500"
+      hx-get="{% url 'calendarapp:blank-schedule' %}"
+      hx-target="#blank-schedule-{{ today|date:'Y-m' }}-{{ x }}"
+      x-data="{ date: '{{ today|date:'Y-m' }}-{{ x }}' }"
+      @click="modal = true; openDateId = date"
+    >
+      <span class="text-center text-xs mt-2"
+        >{% if x != 0 %}{{ x }}{% endif %}</span
+      >
+      <div
+        id="blank-schedule-{{ today|date:'Y-m' }}-{{ x }}"
+        class="relative"
+      ></div>
+    </div>
+    {% else %}
+    <div
+      class="flex flex-1 h-32 flex-col border-l last:border-r text-gray-500 first:text-red-500 last:text-red-500"
+    >
+      <span class="text-center text-xs mt-2"></span>
+    </div>
+    {% endif %} {% endfor %}
+  </div>
+  {% endfor %}
+
+  <div
+    class="fixed w-lvw h-lvh top-0 left-0 z-10"
+    x-cloak
+    x-show="modal"
+    @click="modal = false; getClearBlankSchedule(openDateId)"
+  ></div>
+
+  <script>
+    const getClearBlankSchedule = (date) => {
+      const target = `#blank-schedule-${date}`;
+      const url = '{% url 'calendarapp:clear-blank-schedule' %}';
+      htmx.ajax('GET', url, {
+        target: target,
+        trigger: 'click',
+        values: { date: date },
+      });
+    };
+  </script>
+</div>

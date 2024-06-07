@@ -1,0 +1,16 @@
+# python generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+src/static/CACHE/**
+src/static/admin/**/*
+db.sqlite3
+
+# venv
+.venv
+
+# node_modules
+node_modules/**
